@@ -3,6 +3,7 @@ var socket = io();
 var chatMessages = [];
 var username = m.prop("");
 var message = m.prop("");
+var shownImage = m.prop("i.imgur.com/tr8ZKod.gif");
 
 var chat = {
 	controller: function() {
@@ -59,7 +60,7 @@ var chatInput = {
 var imageView = {
 	controller: function() {},
 	view: function (ctrl) {
-		return m('img', {src: "//i.imgur.com/tr8ZKod.gif" });
+		return m('img', {src: "//" + shownImage() });
 	}
 };
 
