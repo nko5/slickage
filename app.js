@@ -1,14 +1,13 @@
+var path = require('path');
 var express = require('express');
 var app = express();
 
-//Create a static file server
-app.configure(function() {
-  app.use(express.static(__dirname + '/public'));
+app.set('port', process.env.PORT || 8080);
+app.use(express.static(path.join(__dirname, '/public')));
+app.get('*', function (req, res) {
+	res.sendFile('index.html');
 });
 
-//Get the dummy data
-require('./server/ddata.js');
-
-var port = 8080;
+var port = app.get('port');
 app.listen(port);
 console.log('Express server started on port %s', port);
