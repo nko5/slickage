@@ -5,7 +5,13 @@ var mongoose = require('mongoose');
 
 mongoose.connect(process.env.MONGO_URL);
 
-var Msg = mongoose.model('Msg', { channel: String, message: String, name: String});
+var Msg = mongoose.model('Msg', {
+  channel: String,
+  message: String,
+  name: String,
+  timestamp: { type : Date, default: Date.now }
+});
+
 app.set('port', process.env.PORT || 8080);
 app.use(express.static(path.join(__dirname, '/public')));
 app.get('*', function (req, res) {
