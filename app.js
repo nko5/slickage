@@ -8,6 +8,18 @@ app.get('*', function (req, res) {
 	res.sendFile('index.html', {root: __dirname + '/public'});
 });
 
-var port = app.get('port');
-app.listen(port);
-console.log('Express server started on port %s', port);
+var io = require('socket.io').listen(app.listen(app.get('port')));
+
+io.sockets.on('connection', function (socket) {
+	console.log('A user connected');
+	socket.emit('message', {message: 'Welcome to the chat room!'});
+	socket.on('send', function (data) {
+		console.log(data);
+		io.sockets.emit('message', data);
+	});
+	socket.on('disconnect', function () {
+		console.log('user disconnected');
+	});
+});
+
+console.log('Express server started on port %s', app.get('port'));
