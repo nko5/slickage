@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <title>Scour CHAT</title>
   <head>
+    <title>Scour CHAT</title>
     <link rel='stylesheet' type='text/css' href='styles/main.css'>
   </head>
+
   <body>
-    <div>
-      ho brah..
-    </div>
+    <header>
+      <h1>Scour Chat</h1>
+    </header>
+
+    <section>
+      <div id="chatDisplay"></div>
+      <div id="imageView">image</div>
+    </section>
+
+    <section class="userInput">
+      <div id="chatInput"></div>
+    </section>
 
     <script src="/js/mithril.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/index.js"></script>
   </body>
+
 </html>

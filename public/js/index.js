@@ -1,55 +1,68 @@
-var chat = {};
 var socket = io();
 
-chat.vm = {
-	init: function () {
-    var self = this;
-		self.list = [];
-		self.username = m.prop("");
-		self.msg = m.prop("");
-		self.send = function () {
-			if (!self.username()) { alert('Please type your name!'); }
-      else if (self.msg()) {
-				socket.emit('send', {message: self.msg(), name: self.username()});
-				self.msg("");
-			}
-		};
-		self.listen = (function () {
+var chatMessages = [];
+var username = m.prop("");
+var message = m.prop("");
+
+var chat = {
+	controller: function() {
+		(function () {
 			m.startComputation();
 			socket.on('message', function (data) {
-				try { if (data.message) { self.list.push(data); } }
+				try { if (data.message) { chatMessages.push(data); } }
         catch (e) { alert('There is a problem:', e); }
         finally { m.endComputation(); }
 			});
-		}) ();
+		})();
+	},
+	vm: { init: function() {} },
+	view: function (ctrl) {
+		return m("section",
+			[m("div.conversation",
+	      [
+					chatMessages.map(function (msg, i) {
+						return m('div',
+							m('b', (msg.name ? msg.name : 'Server' ) + ': '),
+							m('span', msg.message)
+	          );
+					})
+	      ])
+	    ]
+		);
 	}
 };
 
-chat.controller = function () {
-	chat.vm.init();
+var chatInput = {
+	controller: function() {},
+	vm: {
+		init: function() {},
+		send: function () {
+			if (!username()) { alert('Please type your name!'); }
+      else if (message()) {
+				var payload = { message: message(), name: username() };
+				socket.emit('send', payload);
+				message(""); // reset msg input
+			}
+		}
+	},
+	view: function (ctrl) {
+		return m("section", [
+			m("div", "Username: "),
+			m("input.chat", {onchange: m.withAttr("value", username), value: username()}),
+			m("br"), m("br"),
+			m("textarea.chat", {onchange: m.withAttr("value", message), value: message()}),
+			m("button", {onclick: chatInput.vm.send}, "Send")
+		]);
+	}
 };
 
-chat.view = function (ctrl) {
-	return m("section",
-		m("h1", "Node Express Socket.io Mithril"),
-		m("h4", "------------------------ Javascript all the way ------------------------"),
-		[
-      m("div.conversation",
-      [
-				chat.vm.list.map(function (msg, i) {
-					return m('div',
-						m('b', (msg.name? msg.name:'Server' )+': '),
-						m('span', msg.message)
-          );
-				})
-      ]),
-			m("div", "Name: ",
-			[m("input.chat", {onchange: m.withAttr("value", chat.vm.username), value: chat.vm.username()})]),
-			m("br"),
-			m("input.chat", {onchange: m.withAttr("value", chat.vm.msg), value: chat.vm.msg()}),
-			m("button", {onclick: chat.vm.send}, "Send")
-    ]
-	);
+var imageView = {
+	controller: function() {},
+	view: function (ctrl) {
+		return m('img', {src: "//i.imgur.com/tr8ZKod.gif" });
+	}
 };
 
-m.module(document.body, {controller: chat.controller, view: chat.view});
+m.module(document.getElementById('chatDisplay'), chat);
+m.module(document.getElementById('chatInput'), chatInput);
+m.module(document.getElementById('imageView'), imageView);
