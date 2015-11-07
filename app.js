@@ -1,7 +1,11 @@
 var path = require('path');
 var express = require('express');
 var app = express();
+var mongoose = require('mongoose');
 
+mongoose.connect(process.env.MONGO_URL);
+
+var Msg = mongoose.model('Msg', { channel: String, message: String, name: String});
 app.set('port', process.env.PORT || 8080);
 app.use(express.static(path.join(__dirname, '/public')));
 app.get('*', function (req, res) {
@@ -15,7 +19,11 @@ io.sockets.on('connection', function (socket) {
 	socket.emit('message', {message: 'Welcome to the chat room!'});
 	socket.on('send', function (data) {
 		console.log(data);
+		var msg = new Msg({ channel: 'General', message: data.message, name: data.name });
 		io.sockets.emit('message', data);
+		msg.save(function (err) {
+			if (err) throw err;
+		});
 	});
 	socket.on('disconnect', function () {
 		console.log('user disconnected');
