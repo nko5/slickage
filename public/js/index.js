@@ -56,9 +56,19 @@ var chatInput = {
 		]);
 	}
 };
-
+var imgq = [];
 var imageView = {
-	controller: function() {},
+  controller: function() {
+    socket.on('images', function(data) {
+      try {
+        if (data.images) {
+          imgq = data.images;
+        }
+      }
+      catch (e) { alert('There is an image problem:', e); }
+      finally { m.endComputation(); }
+    });
+  },
   view: function (ctrl) {
     return m('img', {src: shownImage() });
   }
