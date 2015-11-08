@@ -87,6 +87,6 @@ setInterval(function() {
   }
   if (imgq.length > 0) {
     shownImage = m.prop(imgq.shift());
-    m.module(document.getElementById('imageView'), imageView);
+    m.render(document.getElementById('imageView'), imageView);
   }
 }, 4000 /* you never need to watch more than 4 seconds of any gif, ever. */);
