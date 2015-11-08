@@ -60,7 +60,7 @@ io.sockets.on('connection', function (socket) {
     }
     console.log('grabbing', keyword, 'page:', page);
     var options = {
-      all: keyword,
+      any: keyword,
       type: 'anigif',
       page: page
     };
