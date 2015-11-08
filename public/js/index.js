@@ -12,12 +12,12 @@ var chat = {
 			socket.on('message', function (data) {
 				try {
           if (data.message) { chatMessages.push(data); }
+          var elem = document.getElementById('conv');
+          if (elem) elem.scrollTop = elem.scrollHeight + 100;
         }
         catch (e) { alert('There is a problem:', e); }
         finally {
           m.endComputation();
-          var elem = document.getElementById('conv');
-          if (elem) elem.scrollTop = elem.scrollHeight + 100;
         }
 			});
 		})();
