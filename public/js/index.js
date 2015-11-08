@@ -59,7 +59,7 @@ var chatInput = {
 		return m("section", [
 			m("input.username", {onchange: m.withAttr("value", username), value: username()}),
 			m("input.chat", {onchange: m.withAttr("value", message), value: message()}),
-			m("button", {onclick: chatInput.vm.send}, "Send")
+			m("button.sendButton", {onclick: chatInput.vm.send}, "Send")
 		]);
 	}
 };
