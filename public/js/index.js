@@ -42,6 +42,7 @@ var chatInput = {
       else if (message()) {
 				var payload = { message: message(), name: username() };
 				socket.emit('send', payload);
+        socket.emit('grab');
 				message(""); // reset msg input
 			}
 		}
