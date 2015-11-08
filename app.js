@@ -43,14 +43,14 @@ io.sockets.on('connection', function (socket) {
 		console.log('user disconnected');
 	});
   socket.on('grab', function(dat) {
-    var page = 1;
+    var page = 0;
     // get new selection of the same keyword
     if (keyword === last.keyword) {
       page = ++last.page;
     }
     else {
       last.keyword = keyword;
-      page = last.page = 1;
+      page = last.page = 0;
     }
     console.log('grabbing', keyword, 'page:', page);
     var options = {
