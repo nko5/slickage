@@ -21,6 +21,11 @@ app.get('*', function (req, res) {
 });
 
 var io = require('socket.io').listen(app.listen(app.get('port')));
+var keyword = 'anime';
+var last = {
+  keyword: 'anime',
+  page: 1
+};
 
 io.sockets.on('connection', function (socket) {
 	console.log('A user connected');
@@ -28,6 +33,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('send', function (data) {
 		console.log(data);
 		var msg = new Msg({ channel: 'General', message: data.message, name: data.name });
+    keyword = data.message;
 		io.sockets.emit('message', data);
 		msg.save(function (err) {
 			if (err) throw err;
@@ -37,6 +43,16 @@ io.sockets.on('connection', function (socket) {
 		console.log('user disconnected');
 	});
   socket.on('grab', function(dat) {
+    var page = 1;
+    // get new selection of the same keyword
+    if (keyword === last.keyword) {
+      page = ++last.page;
+    }
+    else {
+      last.keyword = keyword;
+      page = last.page = 1;
+    }
+    console.log('grabbing', keyword, 'page:', page);
     var options = {
       all: keyword,
       type: 'anigif',
