@@ -11,9 +11,7 @@ var chat = {
 			m.startComputation();
 			socket.on('message', function (data) {
 				try {
-          if (data.message) {
-            chatMessages.push(data);
-          }
+          if (data.message) { chatMessages.push(data); }
         }
         catch (e) { alert('There is a problem:', e); }
         finally {
@@ -79,12 +77,9 @@ var imageView = {
   controller: function() {
     socket.on('images', function(data) {
       try {
-        if (data.images) {
-          imgq = data.images;
-        }
+        if (data.images) { imgq = data.images; }
       }
       catch (e) { alert('There is an image problem:', e); }
-      finally { m.endComputation(); }
     });
   },
   view: function (ctrl) {
@@ -97,13 +92,8 @@ m.module(document.getElementById('chatInput'), chatInput);
 m.module(document.getElementById('imageView'), imageView);
 
 setInterval(function() {
-  var elem = document.getElementById('conv');
-  if (elem) elem.scrollTop = elem.scrollHeight + 100;
-  console.log('refreshing image');
   // repopulate with new data
-  if (imgq.length < 1) {
-    socket.emit('grab');
-  }
+  if (imgq.length < 1) { socket.emit('grab'); }
   if (imgq.length > 0) {
     shownImage = m.prop(imgq.shift());
     m.render(document.getElementById('imageView'), imageView);
