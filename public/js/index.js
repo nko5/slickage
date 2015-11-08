@@ -49,10 +49,8 @@ var chatInput = {
 	},
 	view: function (ctrl) {
 		return m("section", [
-			m("div", "Username: "),
-			m("input.chat", {onchange: m.withAttr("value", username), value: username()}),
-			m("br"), m("br"),
-			m("textarea.chat", {onchange: m.withAttr("value", message), value: message()}),
+			m("input.username", {onchange: m.withAttr("value", username), value: username()}),
+			m("input.chat", {onchange: m.withAttr("value", message), value: message()}),
 			m("button", {onclick: chatInput.vm.send}, "Send")
 		]);
 	}
