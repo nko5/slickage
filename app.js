@@ -3,6 +3,7 @@ var path = require('path');
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
+var scourer = require('scourer');
 
 mongoose.connect(process.env.MONGO_URL);
 
@@ -35,6 +36,26 @@ io.sockets.on('connection', function (socket) {
 	socket.on('disconnect', function () {
 		console.log('user disconnected');
 	});
+  socket.on('grab', function(dat) {
+    var options = {
+      all: keyword,
+      type: 'anigif',
+      page: page
+    };
+    scourer.gallery.search(options, function(error, data) {
+      if (error) { console.log(error); }
+      else if (data.length === 0) {
+        console.log('no results!');
+      }
+      else {
+        var images = [];
+        data.forEach(function(datum) {
+          images.push(datum.link);
+        });
+        socket.emit('images', { images: images});
+      }
+    });
+  });
 });
 
 console.log('Express server started on port %s', app.get('port'));
