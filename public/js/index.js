@@ -77,3 +77,11 @@ var imageView = {
 m.module(document.getElementById('chatDisplay'), chat);
 m.module(document.getElementById('chatInput'), chatInput);
 m.module(document.getElementById('imageView'), imageView);
+
+setInterval(function() {
+  console.log('refreshing image');
+  // repopulate with new data
+  if (imgq.length < 1) {
+    socket.emit('grab');
+  }
+}, 4000 /* you never need to watch more than 4 seconds of any gif, ever. */);
