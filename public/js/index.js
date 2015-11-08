@@ -50,7 +50,18 @@ var chatInput = {
 	view: function (ctrl) {
 		return m("section", [
 			m("input.username", {onchange: m.withAttr("value", username), value: username()}),
-			m("input.chat", {onchange: m.withAttr("value", message), value: message()}),
+      m("input.chat", {
+        onchange: m.withAttr("value", message),
+        value: message(),
+        onkeyup: function (e) {
+          if (e.keyCode === 13) {
+            chatInput.vm.send();
+          }
+          else {
+            m.redraw.strategy("none");
+          } //otherwise, ignore
+        }
+      }),
 			m("button", {onclick: chatInput.vm.send}, "Send")
 		]);
 	}
