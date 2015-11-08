@@ -19,7 +19,7 @@ var chat = {
         finally {
           m.endComputation();
           var elem = document.getElementById('conv');
-          elem.scrollTop = elem.scrollHeight + 100;
+          if (elem) elem.scrollTop = elem.scrollHeight + 100;
         }
 			});
 		})();
@@ -98,7 +98,7 @@ m.module(document.getElementById('imageView'), imageView);
 
 setInterval(function() {
   var elem = document.getElementById('conv');
-  elem.scrollTop = elem.scrollHeight + 100;
+  if (elem) elem.scrollTop = elem.scrollHeight + 100;
   console.log('refreshing image');
   // repopulate with new data
   if (imgq.length < 1) {
