@@ -10,16 +10,24 @@ var chat = {
 		(function () {
 			m.startComputation();
 			socket.on('message', function (data) {
-				try { if (data.message) { chatMessages.push(data); } }
+				try {
+          if (data.message) {
+            chatMessages.push(data);
+          }
+        }
         catch (e) { alert('There is a problem:', e); }
-        finally { m.endComputation(); }
+        finally {
+          m.endComputation();
+          var elem = document.getElementById('conv');
+          elem.scrollTop = elem.scrollHeight + 100;
+        }
 			});
 		})();
 	},
 	vm: { init: function() {} },
 	view: function (ctrl) {
 		return m("section",
-			[m("div.conversation",
+			[m("div#conv",
 	      [
 					chatMessages.map(function (msg, i) {
 						return m('div',
@@ -62,7 +70,7 @@ var chatInput = {
           } //otherwise, ignore
         }
       }),
-			m("button", {onclick: chatInput.vm.send}, "Send")
+			m("button.sendButton", {onclick: chatInput.vm.send}, "Send")
 		]);
 	}
 };
@@ -89,6 +97,8 @@ m.module(document.getElementById('chatInput'), chatInput);
 m.module(document.getElementById('imageView'), imageView);
 
 setInterval(function() {
+  var elem = document.getElementById('conv');
+  elem.scrollTop = elem.scrollHeight + 100;
   console.log('refreshing image');
   // repopulate with new data
   if (imgq.length < 1) {

@@ -29,7 +29,13 @@ var last = {
 
 io.sockets.on('connection', function (socket) {
 	console.log('A user connected');
-	socket.emit('message', {message: 'Welcome to the chat room!'});
+
+  Msg.find().limit(20).sort('-timestamp').then(function(msgs) {
+    msgs.forEach(function(msg) {
+      socket.emit('message', msg);
+    });
+  });
+
 	socket.on('send', function (data) {
 		console.log(data);
 		var msg = new Msg({ channel: 'General', message: data.message, name: data.name });
